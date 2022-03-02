@@ -1,0 +1,2 @@
+mtwister.c.o: mtwister.c mtwister.h
+mtwister.c mtwister.h :

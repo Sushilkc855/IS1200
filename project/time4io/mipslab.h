@@ -45,6 +45,8 @@ extern char textbuffer[4][16];
 /* for the game*/
 extern uint8_t display[128*4];
 extern uint8_t display2[128*4];
+extern uint8_t display3[128*4];
+extern uint8_t display4[128*4];
 /* Declare functions written by students.
    Note: Since we declare these functions here,
    students must define their functions with the exact types
