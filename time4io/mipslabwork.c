@@ -72,11 +72,11 @@ void user_isr( void )
   return;
 }
 
-
+//koordinat[score][x och y]
 /*moves snake*/
 void moveSnake(){
   if (direction == 0){ //höger
-    snakeX++;
+    snakeX++; // new position
     f = 0; 
     while(f < *portE){
       koordinat[*portE-f][0] = koordinat[*portE-f- 1][0]; // 2=1 1=0   
@@ -267,6 +267,18 @@ void firstStart (){
   
 }
 
+void colide_with_self() {
+  int n = 0;
+  while (n < *portE) {
+    if (snakeX == koordinat[n+1][0] && snakeY == koordinat[n+1][1] ){
+      gameover = 1;
+      
+    }
+  n++;
+  }  
+}
+
+
 /* This function is called repetitively from the main program */
 void labwork( void )
 {
@@ -305,6 +317,7 @@ void labwork( void )
     getFood();                 //Calls funcktion that gets the apple pixel
     moveSnake();               // snake direction disided by the buttons
     setPixelSnake(snakeX, snakeY);  // display gets the snake pixel       
+    colide_with_self(); 
     foodEaten();               // cheaks if the food is eaten. 
     boders();                  // cheaks if the snake cross the bouders. 
     display_image(0, display); // draws the pixel on the oled display. 
