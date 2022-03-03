@@ -41,7 +41,7 @@ int startMeny = 0;
 int r = 5; // random variabel
 
 
-int koordinat[200][2]; 
+int koordinat[255][2]; 
 int kor1 = 0;
 int kor2 = 0; 
 int i = 0; 
