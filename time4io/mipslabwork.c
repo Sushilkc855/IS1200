@@ -5,7 +5,8 @@
 
    This file should be changed by YOU! So you must
    add comment(s) here with your name(s) and date(s):
-
+   Updated 2022-03-03 by Sushil KC
+   Updated 2022-03-03 by Sebastian Rone
    This file modified 2017-04-31 by Ture Teknolog 
 
    For copyright and licensing, see file COPYING */
@@ -28,7 +29,6 @@ char textstring[] = "text, more text, and even more text!";
 // 1111 0000 = msb längst ner. De sista 4 på raden lyser.
   
 #define PIXEL_UNIT 8
-#define PAGE 4
 int timeoutcount = 0;
 int f = 0;
 int snakeX = 0;       // snake pos on the x axes. 0 > 128
@@ -38,7 +38,7 @@ int appleX = 20;
 int appleY = 20;
 int gameover = 0; 
 int startMeny = 0; 
-int r = 5;
+int r = 5; // random variabel
 
 
 int koordinat[200][2]; 
@@ -74,6 +74,7 @@ void user_isr( void )
 
 //koordinat[score][x och y]
 /*moves snake*/
+/*Sets up new koordinets depending on the movement of the snake.*/
 void moveSnake(){
   if (direction == 0){ //höger
     snakeX++; // new position
@@ -132,23 +133,23 @@ void clearDisplay(){
   f = 0;
   while (f < 512)
   {
-    display[f] = display2[f]; // clear display 1
-    display3[f] = display2[f]; // clear display 3  
-    display4[f] =  display2[f]; // clear display 4
+    display[f] = display2[f]; // clear display 1. The main display
+    display3[f] = display2[f]; // clear display 3. The food display
+    display4[f] =  display2[f]; // clear display 4. The snake display
     f++; 
   }
   f= 0;
 }
 
+/*Lights upp the right pixel for the snake.*/
 void setPixelSnake(int x, int y){
-  
   i=0; 
   f= 0;
-    while ( f <= *portE){
+  while ( f <= *portE){
      setPixel (koordinat[i][0], koordinat[i][1]);
      f++;
      i++; 
-    }
+  }
   
     f=0; 
      while (f < 512)
@@ -164,45 +165,9 @@ void setPixelSnake(int x, int y){
 void setPixel(int x, int y){
   int i = (y /PIXEL_UNIT); // 18/8 = 2 
   display4[x + i*128] |= 1 << (y - i * PIXEL_UNIT);// display[257] = (1 << (16 - 2 * 8)) => display[256] = 1
-   
- /* while (*portE > f) // if you ate an apple make the snake bigger
-  {
-    if (direction == 0)
-    {
-      x--;
-      i = (y /PIXEL_UNIT);
-      display4[x+i*128] |= 1 << (y - i * PIXEL_UNIT); // makes the snake longer in the x axes depending on the points
-    
-    }
-    f++;
-  }
-    if (direction == 1 {
-      while ( *portE > f) {
-        x--
-      
-      }
-    
-      i = (y /PIXEL_UNIT);
-      display4[x+i*128] = 1 >> (y - i * PIXEL_UNIT);
-
-    while (*portE > f) {
-      x++  
-      f++
-      
-      
-    } 
-    
-      x++
-      i = (y /PIXEL_UNIT);
-      display4[x+i*128] = 1 >> (y - i * PIXEL_UNIT);
-    
-    }
-*/
-  
-  
 } 
 
-
+/*Sets the pixel for food.*/
 void setPixelFood(int x, int y){
   int i = (y /PIXEL_UNIT); // 19
   display3[x + i*128] =  1 << (y - i * PIXEL_UNIT); // display3 gets the food coordinates  
@@ -254,6 +219,7 @@ void boders(){
   }
 }
  
+ /*This funtion appers when you first start the game*/
 void firstStart (){
   display_update();
   display_string(0, "WELCOME TO");
@@ -267,6 +233,7 @@ void firstStart (){
   
 }
 
+/*This function checks if the shake colided with ifself.*/
 void colide_with_self() {
   int n = 0;
   while (n < *portE) {
@@ -317,11 +284,10 @@ void labwork( void )
     getFood();                 //Calls funcktion that gets the apple pixel
     moveSnake();               // snake direction disided by the buttons
     setPixelSnake(snakeX, snakeY);  // display gets the snake pixel       
-    colide_with_self(); 
+    colide_with_self();        // This function checks if the snake colided with ifself.
     foodEaten();               // cheaks if the food is eaten. 
     boders();                  // cheaks if the snake cross the bouders. 
     display_image(0, display); // draws the pixel on the oled display. 
     timeoutcount = 0;
-  }
-  
+  }  
 }
